@@ -1,9 +1,7 @@
-<script setup lang="ts">
-import Persons from "./components/Persons.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <Persons />
+  <div>Vue_test</div>
 </template>
 
 <style>
