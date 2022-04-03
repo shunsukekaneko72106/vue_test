@@ -16,5 +16,7 @@ module.exports = {
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    //変数の宣言後エラーが出るため、追加
+    // "@typescript-eslint/no-unused-vars": "off",
   },
 };
