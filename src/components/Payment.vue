@@ -24,7 +24,6 @@
   height: 80px;
   width: 400px;
   background-color: rgb(215, 231, 250);
-
 }
 label {
   font-size: 20px;
