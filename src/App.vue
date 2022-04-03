@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Persons from "./components/Persons.vue";
+import Payment from "./components/Payment.vue";
 </script>
 
 <template>
-  <Persons />
+  <Payment />
 </template>
 
 <style>
