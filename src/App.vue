@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Payment from "./components/Payment.vue";
+</script>
 
 <template>
-  <div>Vue_test</div>
+  <Payment />
 </template>
 
 <style>
