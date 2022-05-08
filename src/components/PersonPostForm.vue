@@ -23,7 +23,7 @@ const register = () => {
     <div class="input-container">
       <div class="input-column">
         <span>name:</span>
-        <input class="input" v-model="inputtinfName" />
+        <input class="input-name" v-model="inputtinfName" />
       </div>
       <div class="input-column">
         <span>age:</span>
