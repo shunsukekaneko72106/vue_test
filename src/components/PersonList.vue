@@ -9,7 +9,9 @@ defineProps<Props>();
 
 const emit = defineEmits(["delete"]);
 const onclickDelete = (id: number) => {
-  emit("delete", id);
+  if (confirm("本当に実行してもよろしいでしょうか？")) {
+    emit("delete", id);
+  }
 };
 </script>
 

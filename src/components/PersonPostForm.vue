@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const inputtinfName = ref<string>("");
 const inputtingAge = ref<number>(0);
@@ -16,6 +16,20 @@ const register = () => {
   console.log(person);
   emit("register", person);
 };
+
+const nameLengthLimit = 15;
+
+const isValidName = computed(() => {
+  if (inputtinfName.value.length >= nameLengthLimit) {
+    return false;
+  } else {
+    return true;
+  }
+});
+
+const color = computed(() => {
+  return isValidName.value ? "blue" : "red";
+});
 </script>
 
 <template>
@@ -25,12 +39,17 @@ const register = () => {
         <span>name:</span>
         <input class="input-name" v-model="inputtinfName" />
       </div>
+      <span class="error-message" v-if="!isValidName"
+        >{{ nameLengthLimit }}文字以上は不可です</span
+      >
       <div class="input-column">
         <span>age:</span>
         <input class="input" v-model="inputtingAge" type="number" />
       </div>
     </div>
-    <button @click="register" class="register-button">register</button>
+    <button :disabled="!isValidName" @click="register" class="register-button">
+      register
+    </button>
   </div>
 </template>
 
@@ -60,6 +79,10 @@ const register = () => {
   justify-content: space-between;
 }
 
+.input-name {
+  background-color: v-bind(color);
+}
+
 input {
   width: 120px;
   margin-bottom: 8px;
@@ -67,5 +90,9 @@ input {
 span {
   font-size: 20px;
   font-weight: bold;
+}
+.error-message {
+  font-size: 12px;
+  color: rgb(243, 2, 2);
 }
 </style>
