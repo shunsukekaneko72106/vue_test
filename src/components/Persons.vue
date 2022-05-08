@@ -18,7 +18,7 @@ const persons: Ref<Person[]> = ref([
 
 <template>
   <div class="container">
-    <h1>title</h1>
+    <h1>タイトル</h1>
     <PersonPostForm />
     <div class="list-container">
       <ul>
