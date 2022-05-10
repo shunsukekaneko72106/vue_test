@@ -3,13 +3,12 @@
 // import Persons from "./components/Persons.vue";
 
 //【世界で7万人が受講】Understanding TypeScript 日本語版
-import Understanding_TypeScriptVue from "./components/Understanding_TypeScript.vue";
+import UnderstandingTypeScriptVue from "./components/UnderstandingTypeScript.vue";
 </script>
 
 <template>
   <div>
-    <Persons />
-    <Understanding_TypeScriptVue />
+    <UnderstandingTypeScriptVue />
   </div>
 </template>
 
@@ -20,5 +19,11 @@ import Understanding_TypeScriptVue from "./components/Understanding_TypeScript.v
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+#user-input {
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid #ff0062;
+  background: #f7f7f7;
 }
 </style>
