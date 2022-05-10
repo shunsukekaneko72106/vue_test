@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import Persons from "./components/Persons.vue";
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-// import HelloWorld from './components/HelloWorld.vue'
+// [2022年決定版] Vue3 x Typescriptによるアプリケーションづくり
+// import Persons from "./components/Persons.vue";
+
+//【世界で7万人が受講】Understanding TypeScript 日本語版
+import Understanding_TypeScriptVue from "./components/Understanding_TypeScript.vue";
 </script>
 
 <template>
   <div>
     <Persons />
+    <Understanding_TypeScriptVue />
   </div>
 </template>
 
