@@ -1,5 +1,66 @@
-import { validate } from '@babel/types';
 <script setup lang="ts">
+/**
+ * プロジェクトの状態
+ */
+enum ProjectStatus {
+  Active,
+  Finished,
+}
+
+/**
+ * プロジェクトクラス
+ */
+class Project {
+  constructor(
+    public id: string,
+    public title: string,
+    public setumei: string,
+    public date: number,
+    public status: ProjectStatus
+  ) {}
+}
+
+type Listener = (items: Project[]) => void;
+/**
+ * プロジェクトの状態管理を行うクラス
+ */
+class ProjectState {
+  private listeners: Listener[] = [];
+  private projects: Project[] = [];
+  private static instance: ProjectState;
+
+  // private constructor() {}
+
+  //状態管理を行う関数は必ず一つだけ
+  static getInstance() {
+    if (this.instance) {
+      return this.instance;
+    }
+    this.instance = new ProjectState();
+    return this.instance;
+  }
+
+  addListener(listenerFn: Listener) {
+    this.listeners.push(listenerFn);
+  }
+
+  addProject(title: string, setumei: string, date: number) {
+    const newProject = new Project(
+      Math.random().toString(),
+      title,
+      setumei,
+      date,
+      ProjectStatus.Active
+    );
+
+    this.projects.push(newProject);
+    for (const listenersFn of this.listeners) {
+      listenersFn(this.projects.slice());
+    }
+  }
+}
+
+const projectState = ProjectState.getInstance();
 /**
  * バリデーション型
  */
@@ -73,8 +134,67 @@ function autobind(
   };
   return adjDescriptor;
 }
+//プロジェクトリストクラス
+class ProjectList {
+  templeteElement: HTMLTemplateElement;
+  hostElement: HTMLDivElement;
+  element: HTMLElement;
+  assinedProject: Project[];
+  //
+  constructor(private type: "active" | "finied") {
+    //テンプレートへの参照
+    this.templeteElement = document.getElementById(
+      "project-list"
+    ) as HTMLTemplateElement;
+    this.hostElement = document.getElementById("appunder") as HTMLDivElement;
+    this.assinedProject = [];
+    const importedNode = document.importNode(this.templeteElement, true);
+    this.element = importedNode.firstElementChild as HTMLElement;
+    //CSSにIDを付与するため
+    this.element.id = `${this.type}-projects`;
 
-//プロジェクトクラス
+    projectState.addListener((projects: Project[]) => {
+      const releventProjects = projects.filter((prj) => {
+        if (this.type === "active") {
+          return prj.status === ProjectStatus.Active;
+        }
+        return prj.status === ProjectStatus.Finished;
+      });
+      this.assinedProject = releventProjects;
+      this.renderProjects();
+    });
+    this.attch();
+    this.renderContent();
+  }
+
+  private renderProjects() {
+    const listEl = document.getElementById(
+      `${this.type}-projects`
+    ) as HTMLUListElement;
+    listEl.innerHTML = "";
+    for (const prjItem of this.assinedProject) {
+      const listItem = document.createElement("li");
+      listItem.textContent = prjItem.title;
+      listEl.appendChild(listItem);
+    }
+  }
+
+  private renderContent() {
+    const listId = `${this.type}-projects-list`;
+    /* eslint-disable */
+    this.element.querySelector("ul")!.id = listId;
+    this.element.querySelector("h2")!.textContent =
+      this.type === "active" ? "実行中プロジェクト" : "完了プロジェクト";
+  }
+  /**
+   * 最後のDiv要素に値を追加する
+   */
+  private attch(): void {
+    this.hostElement.insertAdjacentElement("beforebegin", this.element);
+  }
+}
+
+//プロジェクトインプットクラス
 class ProjectInput {
   //thisの型設定
   templeteElement: HTMLTemplateElement;
@@ -110,8 +230,7 @@ class ProjectInput {
     this.attch();
   }
   /**
-   * inputの値を取得する
-   * 戻り値は「タプル」か「なし」かを指定する
+   * ユーザー入力を取得する
    */
   private getUserInput(): [string, string, number] | void {
     const enteredTitle = this.titleInputElemtnt.value;
@@ -164,7 +283,7 @@ class ProjectInput {
     //配列かどうかを判定しないとエラーが出る（反復子プロトコルは、値の並び（有限でも無限でも）を生成）
     if (Array.isArray(userInput)) {
       const [title, setumei, date] = userInput;
-      console.log(title, setumei, date);
+      projectState.addProject(title, setumei, date);
       this.clearInput();
     }
   }
@@ -187,6 +306,8 @@ class ProjectInput {
 window.addEventListener("load", function () {
   /* eslint-disable */
   const prjInput = new ProjectInput();
+  const actProList = new ProjectList("active");
+  const finishiedPrj = new ProjectList("finied");
 });
 </script>
 
