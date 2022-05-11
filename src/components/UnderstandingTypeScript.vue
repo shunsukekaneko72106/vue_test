@@ -1,4 +1,60 @@
+import { validate } from '@babel/types';
 <script setup lang="ts">
+/**
+ * バリデーション型
+ */
+interface Validatable {
+  value: string | number;
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  min?: number;
+  max?: number;
+}
+/**
+ * バリデーション関数
+ * @param validatableInput
+ */
+function validate(validatableInput: Validatable) {
+  //チェック結果を格納する
+  let isValid = true;
+
+  //必修チェック
+  if (validatableInput.required) {
+    isValid = isValid && validatableInput.value.toString().trim().length !== 0;
+  }
+  //最小文字数チェック
+  if (
+    validatableInput.minLength != null &&
+    typeof validatableInput.value === "string"
+  ) {
+    isValid =
+      isValid && validatableInput.value.length >= validatableInput.minLength;
+  }
+  //最大文字数チェック
+  if (
+    validatableInput.maxLength != null &&
+    typeof validatableInput.value === "string"
+  ) {
+    isValid =
+      isValid && validatableInput.value.length <= validatableInput.maxLength;
+  }
+  //最小文字数チェック
+  if (
+    validatableInput.min != null &&
+    typeof validatableInput.value === "number"
+  ) {
+    isValid = isValid && validatableInput.value >= validatableInput.min;
+  }
+  //最小文字数チェック
+  if (
+    validatableInput.max != null &&
+    typeof validatableInput.value === "number"
+  ) {
+    isValid = isValid && validatableInput.value <= validatableInput.max;
+  }
+  return isValid;
+}
 /**
  * デコレーター
  */
@@ -62,10 +118,26 @@ class ProjectInput {
     const enteredSetumei = this.setumeiInputElemtnt.value;
     const enteredDate = this.dateInputElemtnt.value;
 
+    const titleValitable: Validatable = {
+      value: enteredTitle,
+      required: true,
+      minLength: 5,
+    };
+    const setumeiValitable: Validatable = {
+      value: enteredSetumei,
+      required: true,
+    };
+    const dateValitable: Validatable = {
+      value: +enteredDate, //数字変換
+      min: 1,
+      max: 100,
+    };
+
     if (
-      enteredTitle.trim().length === 0 ||
-      enteredSetumei.trim().length === 0 ||
-      enteredDate.trim().length === 0
+      //バリデーション
+      !validate(titleValitable) ||
+      !validate(setumeiValitable) ||
+      !validate(dateValitable)
     ) {
       alert("入力値がただしくありません");
     } else {
@@ -73,6 +145,14 @@ class ProjectInput {
     }
   }
 
+  /**
+   * 送信ボタンを送信後、値を削除する
+   */
+  private clearInput(): void {
+    this.titleInputElemtnt.value = "";
+    this.setumeiInputElemtnt.value = "";
+    this.dateInputElemtnt.value = "";
+  }
   /**
    * submitHandler
    * @param event
@@ -85,6 +165,7 @@ class ProjectInput {
     if (Array.isArray(userInput)) {
       const [title, setumei, date] = userInput;
       console.log(title, setumei, date);
+      this.clearInput();
     }
   }
 
