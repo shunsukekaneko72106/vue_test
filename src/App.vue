@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import Persons from "./components/Persons.vue";
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-// import HelloWorld from './components/HelloWorld.vue'
+// [2022年決定版] Vue3 x Typescriptによるアプリケーションづくり
+// import Persons from "./components/Persons.vue";
+
+//【世界で7万人が受講】Understanding TypeScript 日本語版
+import UnderstandingTypeScriptVue from "./components/UnderstandingTypeScript.vue";
 </script>
 
 <template>
   <div>
-    <Persons />
+    <UnderstandingTypeScriptVue />
   </div>
 </template>
 
@@ -18,5 +19,11 @@ import Persons from "./components/Persons.vue";
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+#user-input {
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid #ff0062;
+  background: #f7f7f7;
 }
 </style>
