@@ -134,6 +134,43 @@ function autobind(
   };
   return adjDescriptor;
 }
+//コンポーネントクラス
+abstract class component<T extends HTMLElement, U extends HTMLElement> {
+  templeteElement: HTMLTemplateElement;
+  hostElement: T;
+  element: U;
+  constructor(
+    templatedId: string,
+    hostElementId: string,
+    insertStart: boolean,
+    newElementId?: string //任意のパラメータは最後に定義する
+  ) {
+    //テンプレートへの参照
+    this.templeteElement = document.getElementById(
+      templatedId
+    ) as HTMLTemplateElement;
+    this.hostElement = document.getElementById(hostElementId) as T;
+    const importedNode = document.importNode(this.templeteElement, true);
+    this.element = importedNode.firstElementChild as U;
+    if (newElementId) {
+      this.element.id = newElementId;
+    }
+    this.attch(insertStart);
+  }
+
+  abstract configure(): void;
+  abstract renderContent(): void;
+  /**
+   * 最後のDiv要素に値を追加する
+   */
+  private attch(insertAtBininng: boolean): void {
+    this.hostElement.insertAdjacentElement(
+      insertAtBininng ? "afterbegin" : "beforeend",
+      this.element
+    );
+  }
+}
+
 //プロジェクトリストクラス
 class ProjectList {
   templeteElement: HTMLTemplateElement;
